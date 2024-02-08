@@ -48,7 +48,8 @@ def find_county_two(my_dict, num):
 
 def write_to_csv(filename, city, county, plate):
     try:
-        with open(filename, 'a', newline='') as file:  # Open the file in append mode
+        # open the file and append to it only (DON'T OVERWRITE)
+        with open(filename, 'a', newline='') as file:
             writer = csv.writer(file)
             writer.writerow([county, city, plate])
         print(f"Updated information has been written to {filename} successfully.")
@@ -57,22 +58,24 @@ def write_to_csv(filename, city, county, plate):
 
 
 def do_the_search(my_dict, city):
-    # Clean the input city name
-    city = city.strip().title()  # Remove leading/trailing whitespaces and capitalize the city name
+    # clean the input city name
+    city = city.strip().title()
 
     for town, values in my_dict.items():
-        # Extract the city portion from the key
+        # make sure the city is clean
         town_city = town.split('-')[0].strip().title()
 
-        # We found the city in our database
+        # we found the city in our database
         if city == town_city:
             county, plate = values
             print(f"{town_city} is in {county} County with license plate number {plate}.")
             return
-    # We didn't find the city, so add it
+
+    # we didn't find the city, so add it
     print(f"We don't have '{city}' in our database yet!")
     try:
-        while True:  # Loop until a valid plate number is entered
+        # loop until the user enters a valid license plate
+        while True:
             try:
                 plate = int(input("Enter the license plate for the city's county (or any string to quit): "))
                 if 1 <= plate <= 56:
